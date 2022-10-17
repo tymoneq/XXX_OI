@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-// teoretycznie 20 punktów
+
 using namespace std;
 
 int main()
