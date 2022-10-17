@@ -4,6 +4,9 @@ using namespace std;
 
 int main()
 {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
     string znaki;
     int n, H, wynik = 0, stopien_baz = 0, otwarte = 0;
     cin >> n >> H;
