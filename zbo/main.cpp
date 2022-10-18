@@ -35,11 +35,12 @@ int main()
 
         else
         {
+            wynik += 2 * G[osada].first;
             // sprawdzamy jaki jest najbliższy punkt między miastem z zapytaniem i innymi miastami w vectorze krol
             for (int j = 0; j < krol.size(); j++)
             {
                 current_city = krol[j];
-                wynik += 2 * G[osada].first;
+
                 for (auto city = G[max(current_city, osada)].second.rbegin(); city != G[max(current_city, osada)].second.rend(); city++)
                 {
 
