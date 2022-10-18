@@ -23,7 +23,7 @@ int main()
         G[max_w].second.insert(max_w);
     }
 
-    int osada, wynik = 0, miasto;
+    int osada, wynik = 0, current_city;
     // tworzymy wektor gdzie będą zapisywane wszystkie miasta
     vector<int> krol;
     for (int i = 0; i < k; i++)
@@ -38,16 +38,16 @@ int main()
             // sprawdzamy jaki jest najbliższy punkt między miastem z zapytaniem i innymi miastami w vectorze krol
             for (int j = 0; j < krol.size(); j++)
             {
-                miasto = krol[j];
+                current_city = krol[j];
                 wynik += 2 * G[osada].first;
-                for (auto city = G[max(miasto, osada)].second.rbegin(); city != G[max(miasto, osada)].second.rend(); city++)
+                for (auto city = G[max(current_city, osada)].second.rbegin(); city != G[max(current_city, osada)].second.rend(); city++)
                 {
 
-                    if (G[min(miasto, osada)].second.find(*city) != G[min(miasto, osada)].second.end())
+                    if (G[min(current_city, osada)].second.find(*city) != G[min(current_city, osada)].second.end())
                     {
-                        auto nearest_point_p = G[min(miasto, osada)].second.find(*city);
+                        auto nearest_point_p = G[min(current_city, osada)].second.find(*city);
 
-                        wynik += (G[max(miasto, osada)].first - G[*nearest_point_p].first + G[min(miasto, osada)].first - G[*nearest_point_p].first) * 2;
+                        wynik += (G[max(current_city, osada)].first - G[*nearest_point_p].first + G[min(current_city, osada)].first - G[*nearest_point_p].first) * 2;
                         break;
                     }
                 }
