@@ -24,7 +24,7 @@ int main()
     }
 
     int osada, wynik = 0, miasto;
-    // tworzymy wektro gdzie będą zapisywane wszystkie miasta
+    // tworzymy wektor gdzie będą zapisywane wszystkie miasta
     vector<int> krol;
     for (int i = 0; i < k; i++)
     {
@@ -35,6 +35,7 @@ int main()
 
         else
         {
+            // sprawdzamy jaki jest najbliższy punkt między miastem z zapytaniem i innymi miastami w vectorze krol
             for (int j = 0; j < krol.size(); j++)
             {
                 miasto = krol[j];
