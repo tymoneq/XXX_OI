@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+// sprawdz ustawianie tablicy na -1
 int matrix[2000][2000];
 int main()
 {
