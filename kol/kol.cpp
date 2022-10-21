@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
-
+// Tymon Tumialis
 using namespace std;
-// sprawdz ustawianie tablicy na -1
+// Z 26 77
 int matrix[2000][2000];
 long long czas[2000][2000];
 int main()
@@ -10,14 +10,14 @@ int main()
     cin.tie(0);
     cout.tie(0);
 
-    int m, p, n, x, y, type, num_collected = 0;
+    int m, p, n, x, y, type;
     char oper;
     cin >> m >> p >> n;
     int new_x = 1;
     int new_y = 1;
     // typ konkretnego elementu w snake'u
     vector<int> snake_type;
-    snake_type[0] = 0;
+    snake_type.push_back(0);
     // ustawienie wartości na -1
     for (int i = 0; i < m; i++)
         for (int j = 0; j < m; j++)
@@ -42,14 +42,19 @@ int main()
         cin >> oper;
         if (oper == 'Z')
         {
+
             cin >> x >> y;
-            int time = czas[x][y];
+            long long time = czas[x][y];
             if (time == -1)
                 cout << -1 << "\n";
             else
             {
-                // dodaj tu kod
-                // new_x new_y
+                long long current = czas[new_x][new_y];
+                long long size = snake_type.size();
+                if (current - time >= snake_type.size())
+                    cout << -1 << "\n";
+                else
+                    cout << snake_type[snake_type.size() - (current - time) - 1] << "\n";
             }
         }
         else if (oper == 'P')
@@ -76,9 +81,9 @@ int main()
 
         else if (oper == 'D')
         {
-            new_x -= 1;
+            new_x += 1;
             czas[new_x][new_y] = 0;
-            czas[new_x][new_y] = czas[new_x + 1][new_y] + 1;
+            czas[new_x][new_y] = czas[new_x - 1][new_y] + 1;
             if (matrix[new_x][new_y] != -1)
             {
                 snake_type.push_back(matrix[new_x][new_y]);
@@ -87,7 +92,7 @@ int main()
         }
         else if (oper == 'G')
         {
-            new_x += 1;
+            new_x -= 1;
             czas[new_x][new_y] = 0;
             czas[new_x][new_y] = czas[new_x + 1][new_y] + 1;
             if (matrix[new_x][new_y] != -1)
