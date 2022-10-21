@@ -49,6 +49,7 @@ int main()
             else
             {
                 // dodaj tu kod
+                // new_x new_y
             }
         }
         else if (oper == 'P')
