@@ -1,6 +1,12 @@
 #include <bits/stdc++.h>
 // Tymon Tumialis
 using namespace std;
+struct poz
+{
+    int front = 0;
+    int back = 0;
+    int index = 0;
+};
 
 int main()
 {
@@ -11,7 +17,7 @@ int main()
     cin >> n >> m >> k;
     vector<int> Bajtek(n);
     vector<int> Bitek(m);
-    vector<pair<vector<pair<int, int>>, vector<pair<int, int>>>> train(k + 1); // first = Bajtek second = Bitek
+    vector<pair<vector<poz>, vector<pair<int, int>>>> train(k + 1); // first = Bajtek second = Bitek
     vector<bool> visited(n);
     vector<int> distance_front(n);
     vector<int> distance_back(n);
@@ -51,16 +57,33 @@ int main()
     // wczytanie do wektora
     for (int i = 0; i < n; i++)
     {
-        auto par = make_pair(distance_front[i], distance_back[i]);
         int val = Bajtek[i];
-        train[val].first.push_back(par);
+        poz pos;
+        pos.front = distance_front[i];
+        pos.back = distance_back[i];
+        pos.index = i;
+        train[val].first.push_back(pos);
     }
     for (int i = 0; i < m; i++)
     {
-        auto par = make_pair(i, m - i-1);
+        auto par = make_pair(i, m - i - 1);
         int val = Bitek[i];
         train[val].second.push_back(par);
     }
-    int l=0;
+    // obliczanie które mógł zapisać 
+    
+    for (int i = 1; i <= k; i++)
+    {
+        for (auto Bit : train[i].second)
+        {
+            for (auto Baj : train[i].first)
+            {
+                if (Bit.first <= Baj.front && Bit.second <= Baj.back)
+                    visited[Baj.index] = 1;
+            }
+        }
+    }
+    for (auto el : visited)
+        cout << el << " ";
     return 0;
 }

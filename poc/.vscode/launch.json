@@ -9,8 +9,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "h:/c++Freecode",
-      "program": "h:/c++Freecode/rosster.exe",
+      "cwd": "I:/github/XXX_OI/XXX_OI/poc",
+      "program": "I:/github/XXX_OI/XXX_OI/poc/rosster.exe",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
