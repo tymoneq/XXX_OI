@@ -20,7 +20,6 @@ int main()
     vector<int> Bajtek(n);
     vector<int> Bitek(m);
     vector<pair<vector<poz>, vector<pair<int, int>>>> train(k + 1); // first = Bajtek second = Bitek
-
     vector<bool> visited(n);
     vector<int> distance_front(n);
     vector<int> distance_back(n);
