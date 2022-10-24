@@ -81,7 +81,7 @@ int main()
         for (auto Bit : train[i].second)
         {
 
-            Bit.second;
+            // dodaj liczenie części wspólnej czyli +2 lowerbundy
             auto itr_begin = lower_bound(train[i].first.begin(), train[i].first.end(), Bit.first, first_less);
             auto itr_back = lower_bound(train[i].first.rbegin(), train[i].first.rend(), Bit.second, first_greater);
             int index_f = itr_begin->index;
