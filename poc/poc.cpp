@@ -87,8 +87,9 @@ int main()
             auto itr_back = lower_bound(train[i].first.rbegin(), train[i].first.rend(), Bit.second, first_greater);
             int index_f = itr_begin->index;
             int index_b = itr_back->index;
-            visited[index_b] = 1;
-            visited[index_f] = 1;
+            for (int j = index_f; j <= index_b; j++)
+                if (Bajtek[j] == i)
+                    visited[j] = 1;
         }
     }
     for (auto el : visited)

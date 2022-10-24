@@ -6,6 +6,6 @@ i=0
 while [ $i -le 2 ]
 do 
 time ./poc.exe < poc$i.in > wynik.txt
-./spraw.exe < poc$i.out >> res.txt
+diff -q poc$i.out wynik.txt
 ((i++))
 done
