@@ -1,12 +1,13 @@
 #include <bits/stdc++.h>
 // Tymon Tumialis
 using namespace std;
-struct poz
-{
-    int front = 0;
-    int back = 0;
-    int index = 0;
-};
+
+// struct poz
+// {
+//     int front = 0;
+//     int back = 0;
+//     int index = 0;
+// };
 
 int main()
 {
@@ -17,7 +18,10 @@ int main()
     cin >> n >> m >> k;
     vector<int> Bajtek(n);
     vector<int> Bitek(m);
-    vector<pair<vector<poz>, vector<pair<int, int>>>> train(k + 1); // first = Bajtek second = Bitek
+    // vector<pair<vector<poz>, vector<pair<int, int>>>> train(k + 1); // first = Bajtek second = Bitek
+    vector<vector<pair<int, int>>> Baj_front(k + 1);
+    vector<vector<pair<int, int>>> Baj_back(k + 1);
+    vector<vector<pair<int, int>>> Bit_front(k + 1);
     vector<bool> visited(n);
     vector<int> distance_front(n);
     vector<int> distance_back(n);
@@ -58,29 +62,25 @@ int main()
     for (int i = 0; i < n; i++)
     {
         int val = Bajtek[i];
-        poz pos;
-        pos.front = distance_front[i];
-        pos.back = distance_back[i];
-        pos.index = i;
-        train[val].first.push_back(pos);
+        Baj_front[val].push_back(make_pair(distance_front[i], i));
+        Baj_back[val].push_back(make_pair(distance_back[i], i));
     }
     for (int i = 0; i < m; i++)
     {
         auto par = make_pair(i, m - i - 1);
         int val = Bitek[i];
-        train[val].second.push_back(par);
+        Bit_front[val].push_back(par);
     }
-    // obliczanie które mógł zapisać 
-    
+    // obliczanie które mógł zapisać
+
     for (int i = 1; i <= k; i++)
     {
-        for (auto Bit : train[i].second)
+        for (auto Bit : Bit_front[k])
         {
-            for (auto Baj : train[i].first)
-            {
-                if (Bit.first <= Baj.front && Bit.second <= Baj.back)
-                    visited[Baj.index] = 1;
-            }
+            
+            Bit.first;
+            Bit.second;
+            auto itr_begin = lower_bound(Baj_front[k].begin(), Baj_front[k].begin(), Bit);
         }
     }
     for (auto el : visited)
