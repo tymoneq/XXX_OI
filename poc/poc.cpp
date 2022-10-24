@@ -9,7 +9,7 @@ struct poz
     int index = 0;
 };
 inline bool first_less(poz lhs, int rhs) { return lhs.front < rhs; }
-inline bool first_greater(poz lhs, int rhs) { return lhs.back > rhs; }
+inline bool first_greater(poz lhs, int rhs) { return lhs.back < rhs; }
 int main()
 {
     ios_base::sync_with_stdio(0);
