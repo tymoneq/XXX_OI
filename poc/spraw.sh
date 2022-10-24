@@ -5,7 +5,7 @@ g++ spraw.cpp -o spraw.exe
 i=0
 while [ $i -le 2 ]
 do 
-./poc.exe < poc$i.in > wynik.txt
+time ./poc.exe < poc$i.in > wynik.txt
 ./spraw.exe < poc$i.out >> res.txt
 ((i++))
 done

@@ -2,13 +2,14 @@
 // Tymon Tumialis
 using namespace std;
 
-// struct poz
-// {
-//     int front = 0;
-//     int back = 0;
-//     int index = 0;
-// };
-
+struct poz
+{
+    int front = 0;
+    int back = 0;
+    int index = 0;
+};
+inline bool first_less(poz lhs, int rhs) { return lhs.front < rhs; }
+inline bool first_greater(poz lhs, int rhs) { return lhs.back < rhs; }
 int main()
 {
     ios_base::sync_with_stdio(0);
@@ -18,10 +19,8 @@ int main()
     cin >> n >> m >> k;
     vector<int> Bajtek(n);
     vector<int> Bitek(m);
-    // vector<pair<vector<poz>, vector<pair<int, int>>>> train(k + 1); // first = Bajtek second = Bitek
-    vector<vector<pair<int, int>>> Baj_front(k + 1);
-    vector<vector<pair<int, int>>> Baj_back(k + 1);
-    vector<vector<pair<int, int>>> Bit_front(k + 1);
+    vector<pair<vector<poz>, vector<pair<int, int>>>> train(k + 1); // first = Bajtek second = Bitek
+
     vector<bool> visited(n);
     vector<int> distance_front(n);
     vector<int> distance_back(n);
@@ -61,26 +60,35 @@ int main()
     // wczytanie do wektora
     for (int i = 0; i < n; i++)
     {
+
         int val = Bajtek[i];
-        Baj_front[val].push_back(make_pair(distance_front[i], i));
-        Baj_back[val].push_back(make_pair(distance_back[i], i));
+        poz pos;
+        pos.front = distance_front[i];
+        pos.back = distance_back[i];
+        pos.index = i;
+        train[val].first.push_back(pos);
     }
     for (int i = 0; i < m; i++)
     {
+
         auto par = make_pair(i, m - i - 1);
         int val = Bitek[i];
-        Bit_front[val].push_back(par);
+        train[val].second.push_back(par);
     }
     // obliczanie które mógł zapisać
 
     for (int i = 1; i <= k; i++)
     {
-        for (auto Bit : Bit_front[k])
+        for (auto Bit : train[i].second)
         {
-            
-            Bit.first;
+
             Bit.second;
-            auto itr_begin = lower_bound(Baj_front[k].begin(), Baj_front[k].begin(), Bit);
+            auto itr_begin = lower_bound(train[i].first.begin(), train[i].first.end(), Bit.first, first_less);
+            auto itr_back = lower_bound(train[i].first.rbegin(), train[i].first.rend(), Bit.second, first_greater);
+            int index_f = itr_begin->index;
+            int index_b = itr_back->index;
+            visited[index_b] = 1;
+            visited[index_f] = 1;
         }
     }
     for (auto el : visited)
