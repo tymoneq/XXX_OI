@@ -8,13 +8,16 @@ struct poz
     int back = 0;
     int index = 0;
 };
-inline bool first_less(poz lhs, int rhs) { return lhs.front < rhs; }
-inline bool first_greater(poz lhs, int rhs) { return lhs.back < rhs; }
+inline bool first_less_front(poz lhs, int rhs) { return lhs.front < rhs; }
+inline bool first_less_end(poz lhs, int rhs) { return lhs.front <= rhs; }
+inline bool first_greater_back(poz lhs, int rhs) { return lhs.back < rhs; }
+inline bool first_greater_back_end(poz lhs, int rhs) { return lhs.back > rhs; }
+
 int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    cout.tie(0);
+    //cout.tie(0);
     int n, m, k;
     cin >> n >> m >> k;
     vector<int> Bajtek(n);
@@ -81,18 +84,25 @@ int main()
         for (auto Bit : train[i].second)
         {
 
-            // nie działa
-            auto itr_begin = lower_bound(train[i].first.begin(), train[i].first.end(), Bit.first, first_less);
-            auto itr_back_first = lower_bound(train[i].first.rbegin(), train[i].first.rend(), Bit.first, first_less);
-            auto itr_back_f = lower_bound(train[i].first.begin(), train[i].first.end(), Bit.second, first_greater);
-            auto itr_back = lower_bound(train[i].first.rbegin(), train[i].first.rend(), Bit.second, first_greater);
-            int index_f = itr_begin->index;
-            int index_f_b = itr_back_first->index;
-            // #################
-            int index_b = itr_back->index;
-            int index_b_f = itr_back_f->index;
-            int pocz_zakres = max(index_f, index_b_f);
-            int kon_zakres = min(index_b, index_f_b);
+            
+            auto itr_begin_start = lower_bound(train[i].first.begin(), train[i].first.end(), Bit.first, first_less_front);
+            auto itr_begin_end = lower_bound(train[i].first.rbegin(), train[i].first.rend(), Bit.first, first_less_end);
+            auto itr_back_start = lower_bound(train[i].first.begin(), train[i].first.end(), Bit.second, first_greater_back);
+            auto itr_back_end = lower_bound(train[i].first.rbegin(), train[i].first.rend(), Bit.second, first_greater_back_end);
+            //cout << "<1> " << itr_begin_end->index << endl;
+            //cout << "<2> " << itr_back_end->index << endl;
+            //--itr_begin_end;
+            ++itr_back_end;
+            //cout << "<3>" << itr_begin_end->index << endl;
+            //cout << "<4>" << itr_back_end->index << endl;
+            
+            // int index_begin_f = itr_begin_start->index;
+            // int index_begin_b = itr_begin_end->index;
+            // // #################
+            // int index_back_f = itr_back_start->index;
+            // int index_back_end = itr_back_end->index;
+            int pocz_zakres = max(itr_begin_start->index, itr_back_start->index);
+            int kon_zakres = min(itr_back_end->index, itr_begin_end->index);
             for (int j = pocz_zakres; j <= kon_zakres; j++)
                 if (Bajtek[j] == i)
                     visited[j] = 1;
