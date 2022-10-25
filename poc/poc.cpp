@@ -81,12 +81,19 @@ int main()
         for (auto Bit : train[i].second)
         {
 
-            // dodaj liczenie części wspólnej czyli +2 lowerbundy
+            // nie działa
             auto itr_begin = lower_bound(train[i].first.begin(), train[i].first.end(), Bit.first, first_less);
+            auto itr_back_first = lower_bound(train[i].first.rbegin(), train[i].first.rend(), Bit.first, first_less);
+            auto itr_back_f = lower_bound(train[i].first.begin(), train[i].first.end(), Bit.second, first_greater);
             auto itr_back = lower_bound(train[i].first.rbegin(), train[i].first.rend(), Bit.second, first_greater);
             int index_f = itr_begin->index;
+            int index_f_b = itr_back_first->index;
+            // #################
             int index_b = itr_back->index;
-            for (int j = index_f; j <= index_b; j++)
+            int index_b_f = itr_back_f->index;
+            int pocz_zakres = max(index_f, index_b_f);
+            int kon_zakres = min(index_b, index_f_b);
+            for (int j = pocz_zakres; j <= kon_zakres; j++)
                 if (Bajtek[j] == i)
                     visited[j] = 1;
         }

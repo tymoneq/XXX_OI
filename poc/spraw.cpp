@@ -1,14 +1,14 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-int main()
+int main(int argc, char ** argv)
 {
     ifstream plik, plik_2;
     string test, test_2;
 
-    cin >> test;
+    
     test_2 = "wynik.txt";
-    test += ".out";
+    test = argv[1];
     plik.open(test);
     plik_2.open(test_2);
     int a, b, counter = 1;
