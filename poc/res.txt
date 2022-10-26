@@ -1,12 +1,3 @@
-Error in line 5 poc0.out
-Error in line 7 poc0.out
-Error in line 9 poc0.out
-Error in line 2 poc1.out
-Error in line 3 poc1.out
-Error in line 4 poc1.out
-Error in line 5 poc1.out
-Error in line 6 poc1.out
-Error in line 7 poc1.out
-Error in line 8 poc1.out
-Error in line 9 poc1.out
-Error in line 10 poc1.out
+1000%
+1000%
+1000%
