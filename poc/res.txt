@@ -1,4 +1,7 @@
+Error in line 1 poc0.out
+Error in line 2 poc0.out
 Error in line 5 poc0.out
+Error in line 6 poc0.out
 Error in line 7 poc0.out
 Error in line 9 poc0.out
 Error in line 2 poc1.out
