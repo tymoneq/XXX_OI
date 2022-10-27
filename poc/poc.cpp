@@ -1,89 +1,117 @@
 #include <bits/stdc++.h>
 // Tymon Tumialis
 using namespace std;
-void binary_b(int search, vector<int> &zbior, int l, int r, int &index)
-{
-    int zakres = (r - l) / 2;
-    int val = zbior[zakres];
-
-
-    if (r == l && zbior.size() > 1)
-    {
-        index = l;
-        return;
-    }
-    else if (r == l && zbior.size() == 1)
-    {
-        if (search >= val)
-        {
-            index = 0;
-            return;
-        }
-        else
-        {
-            index = 2;
-            return;
-        }
-    }
-
-    if (search == val)
-    {
-        index = zakres;
-        return;
-    }
-
-    else if (search > val)
-    {
-        r = zakres;
-        binary_b(search, zbior, l, r, index);
-    }
-    else if (search < val)
-    {
-        l = zakres;
-        binary_b(search, zbior, l, r, index);
-    }
-}
 
 void binary_f(int search, vector<int> &zbior, int l, int r, int &index)
 {
-    int zakres = (r - l) / 2;
+    if (search < zbior[0])
+    {
+        index = numeric_limits<int>::min();
+        return;
+    }
+
+    int zakres = (r - l) / 2 + l;
     int val = zbior[zakres];
     if (r == l && zbior.size() > 1)
     {
         index = l;
         return;
     }
-    else if (r == l && zbior.size() == 1)
+    else if (zbior.size() == 1)
     {
-        if (search <= val)
+        if (search == val)
+        {
+            index = 0;
+            return;
+        }
+        else if (search > val)
+        {
+            index = 2;
+            return;
+        }
+        else
+        {
+            index = numeric_limits<int>::min();
+            return;
+        }
+    }
+
+    if (search < val)
+    {
+        r = zakres;
+        binary_f(search, zbior, l, r, index);
+    }
+    else if (search > val)
+    {
+        if (zakres == l)
+            l +=1;
+        else
+            l = zakres;
+        binary_f(search, zbior, l, r, index);
+    }
+    else if (search == val)
+    {
+        index = zakres;
+        return;
+    }
+}
+void binary_b(int search, vector<int> &zbior, int l, int r, int &index)
+{
+    if (search < zbior[zbior.size() - 1])
+    {
+        index = numeric_limits<int>::max();
+        return;
+    }
+
+    int zakres = (r - l) / 2 + l;
+    int val = zbior[zakres];
+
+    if (r == l && zbior.size() > 1)
+    {
+        index = l;
+        return;
+    }
+
+    else if (zbior.size() == 1)
+    {
+        if (search == val)
+        {
+            index = 0;
+            return;
+        }
+        else if (search > val)
         {
             index = 0;
             return;
         }
         else
         {
-            index = 2;
+            index = numeric_limits<int>::max();
             return;
         }
     }
 
-    if (search == val)
+    if (search > val)
+    {
+
+        r = zakres;
+        binary_b(search, zbior, l, r, index);
+    }
+    else if (search < val)
+    {
+        if (zakres == l)
+            l += 1;
+        else
+            l = zakres;
+        binary_b(search, zbior, l, r, index);
+    }
+    else if (search == val)
     {
         index = zakres;
         return;
     }
-
-    else if (search < val)
-    {
-        l = zakres;
-        binary_f(search, zbior, l, r, index);
-    }
-    else if (search > val)
-    {
-        r = zakres;
-        binary_f(search, zbior, l, r, index);
-    }
 }
+
 int main()
 {
 
@@ -133,13 +161,17 @@ int main()
 
     for (int i = 0; i < n; i++)
     {
+
+       
         int val = Bajtek[i];
         int front = distance_front[i];
         int back = distance_back[i];
-        int index_b = 0, index_f = 0;
-
+        int index_b = 0, index_f = -1;
+        if(Bitek_front[val].empty())
+            continue;
         binary_f(front, Bitek_front[val], 0, Bitek_front[val].size() - 1, index_f);
         binary_b(back, Bitek_back[val], 0, Bitek_back[val].size() - 1, index_b);
+
         if (index_b <= index_f)
             visited[i] = 1;
     }
