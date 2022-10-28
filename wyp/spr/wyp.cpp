@@ -50,7 +50,7 @@ int main()
     {
         float cont_track_time = contact_time[i];
         float pass_track_time = bypass_time[i - 1];
-        if (cont_track_time <= pass_track_time)
+        if (cont_track_time < pass_track_time)
             continue;
         else
         {

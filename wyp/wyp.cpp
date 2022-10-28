@@ -46,6 +46,7 @@ int main()
         float time = (actual_track.poz_start + D) / (V_auto - actual_track.v);
         bypass_time[i] = time;
     }
+    // uwzględniaj długość ciężarówek i długość samochodu
     for (int i = 2; i <= n; i++)
     {
         float cont_track_time = contact_time[i];
