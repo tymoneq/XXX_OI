@@ -13,8 +13,8 @@ int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    int n, D, wyprzedone = 1;
-    float V_auto, W, M;
+    int n, wyprzedone = 1;
+    float V_auto, W, M, D;
     cin >> n >> D >> W >> M;
     vector<track> poz(n + 1);
     V_auto = W / M;
@@ -30,8 +30,6 @@ int main()
         poz[i] = l;
     }
     // liczenie czasu do zrównania się z ostatnim tirem
-    // track last_track = poz.back();
-    // float time = (last_track.poz_start - last_track.dl) / (V_auto - last_track.v);
     vector<float> contact_time(n + 1);
     for (int i = 1; i <= n; i++)
     {
@@ -46,7 +44,9 @@ int main()
         float time = (actual_track.poz_start + D) / (V_auto - actual_track.v);
         bypass_time[i] = time;
     }
-    // uwzględniaj długość ciężarówek i długość samochodu
+    
+    // Musisz sprawdzać v ciężarówki czy nie jest mniejsze  
+    // binary search może posortuj 
     for (int i = 2; i <= n; i++)
     {
         float cont_track_time = contact_time[i];
@@ -55,9 +55,9 @@ int main()
             continue;
         else
         {
-            // float poz_first_track_front = pass_track_time * poz[i - 1].v;
-            // float poz_second_track_back = cont_track_time * poz[i].v;
-            // if (D <= poz_first_track_front - poz_second_track_back)
+            float position_track_1 = poz[i - 1].poz_start + poz[i - 1].v * pass_track_time;
+            float position_track_2 = poz[i].poz_start - poz[i].dl + poz[i].v * cont_track_time;
+            if(position_track_2-position_track_1>=D)
                 wyprzedone += 1;
         }
     }
