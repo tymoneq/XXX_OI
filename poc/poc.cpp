@@ -14,7 +14,10 @@ void binary_f(int search, vector<int> &zbior, int l, int r, int &index)
     int val = zbior[zakres];
     if (r == l && zbior.size() > 1)
     {
-        index = l;
+        if (search < val)
+            index = l - 1;
+        else
+            index = l;
         return;
     }
     else if (zbior.size() == 1)
@@ -44,7 +47,7 @@ void binary_f(int search, vector<int> &zbior, int l, int r, int &index)
     else if (search > val)
     {
         if (zakres == l)
-            l +=1;
+            l += 1;
         else
             l = zakres;
         binary_f(search, zbior, l, r, index);
@@ -68,6 +71,7 @@ void binary_b(int search, vector<int> &zbior, int l, int r, int &index)
 
     if (r == l && zbior.size() > 1)
     {
+
         index = l;
         return;
     }
@@ -162,12 +166,13 @@ int main()
     for (int i = 0; i < n; i++)
     {
 
-       
+        if (i == 17)
+            int TT = 0;
         int val = Bajtek[i];
         int front = distance_front[i];
         int back = distance_back[i];
         int index_b = 0, index_f = -1;
-        if(Bitek_front[val].empty())
+        if (Bitek_front[val].empty())
             continue;
         binary_f(front, Bitek_front[val], 0, Bitek_front[val].size() - 1, index_f);
         binary_b(back, Bitek_back[val], 0, Bitek_back[val].size() - 1, index_b);
