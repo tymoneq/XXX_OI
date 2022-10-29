@@ -31,11 +31,24 @@ int main()
     }
     // liczenie czasu do zrównania się z ostatnim tirem
     vector<float> contact_time(n + 1);
-    for (int i = 1; i <= n; i++)
+    for (int i = n; i >= 1; i--)
     {
         track actual_track = poz[i];
         float time = (actual_track.poz_start - actual_track.dl) / (V_auto - actual_track.v);
-        contact_time[i] = time;
+        if (i != n)
+        {
+
+            track previous_track = poz[i + 1];
+            if (actual_track.v > previous_track.v)
+            {
+                float time_fix = (previous_track.poz_start - previous_track.dl - actual_track.poz_start) / (actual_track.v - previous_track.v);
+                contact_time[i] =time - time_fix;
+            }
+            else
+                contact_time[i] = time;
+        }
+        else
+            contact_time[i] = time;
     }
     vector<float> bypass_time(n + 1);
     for (int i = 1; i <= n; i++)
