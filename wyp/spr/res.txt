@@ -1,5 +1,5 @@
-1000%
-1000%
-1000%
-1000%
-1000%
+Error in line 1 wyp0.out
+Error in line 1 wyp1.out
+Error in line 1 wyp2.out
+Error in line 1 wyp3.out
+Error in line 1 wyp4.out
