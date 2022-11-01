@@ -67,13 +67,35 @@ int main()
             }
         }
     }
+    // licz czas
     if (must_check)
     {
         // gdy V_1> V_2
+        // sprawdzaj dystans między nimi i jakie musiałoby być V żeby się dogoniły i gdzie występuje to V
         for (int i = 1; i < index; i++)
         {
+            if (Distance_b_tracks[i] == 1)
+                continue;
+            double time = (poz[i].poz_start + D) / (V_auto - poz[i].v);
+            double pocz_pierwszej = poz[i].poz_start + poz[i].v * time;
+            double kon_drugiej = poz[i + 1].poz_start - poz[i + 1].dl + poz[i + 1].v * time;
+            if (pocz_pierwszej + D <= poz[i + 1].poz_start - poz[i + 1].dl)
+            {
+                wyprzedone += 1;
+                continue;
+            }
+            else if (kon_drugiej - pocz_pierwszej >= D)
+            {
+                double kon_trzec = poz[i + 2].poz_start - poz[+2].dl + poz[+2].v * time;
+                if (kon_drugiej + poz[i + 1].dl + D <= poz[i + 2].poz_start - poz[i + 2].dl)
+                    wyprzedone += 1;
+
+                else if (kon_trzec - kon_drugiej - poz[i + 1].dl - D >= time * 0.001)
+                    wyprzedone += 1;
+            }
         }
     }
+
     // gdy V_1 <= V_2
     for (int i = index; i < n; i++)
     {
