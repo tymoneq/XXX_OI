@@ -93,16 +93,47 @@ int main()
 
             else if (kon_drugiej - pocz_pierwszej >= D)
             {
-                double min_V = (kon_drugiej - pocz_pierwszej) / time;
                 float distans = 0;
-                for (int j = i + 2; j < index; j++)
+                if (kon_drugiej + poz[i + 1].dl <= poz[i + 2].poz_start - poz[i + 2].dl)
                 {
-                    if (poz[j].v <= min_V)
+                    wyprzedone += 1;
+                    continue;
+                }
+                bool wyprz = true;
+                for (int j = i + 2; j <= index; j++)
+                {
+                    if (poz[j].v >= poz[i + 1].v)
+                        distans += poz[j].dl;
+                    else
                     {
-                        
+                        if (poz[j].poz_start - poz[j].dl - distans > poz[i + 1].v * time + poz[i + 1].poz_start)
+                        {
+                            wyprzedone += 1;
+                            wyprz = false;
+                            break;
+                        }
+                        else
+                        {
+                            double timer = (poz[j].poz_start - poz[j].dl - distans - poz[i + 1].poz_start) / (poz[i + 1].v - poz[j].v);
+                            if (timer < time)
+                            {
+                                kon_drugiej = poz[i + 1].poz_start - poz[i + 1].dl + poz[i + 1].v * timer + poz[j].v * (time - timer);
+                                distans += poz[j].dl;
+                                if (kon_drugiej - pocz_pierwszej < D)
+                                {
+                                    wyprz = false;
+                                    break;
+                                }
+                                else if (kon_drugiej - pocz_pierwszej >= D && j == index)
+                                {
+                                    wyprzedone += 1;
+                                    wyprz = false;
+                                }
+                            }
+                        }
                     }
                 }
-                if (kon_drugiej + poz[i + 1].dl <= poz[i + 2].poz_start - poz[i + 2].dl)
+                if (wyprz)
                     wyprzedone += 1;
             }
         }
