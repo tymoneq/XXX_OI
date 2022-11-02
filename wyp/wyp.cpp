@@ -102,6 +102,8 @@ int main()
                 bool wyprz = true;
                 for (int j = i + 2; j <= index; j++)
                 {
+
+                    // uwzględniaj spowolnienie
                     if (poz[j].v >= poz[i + 1].v)
                         distans += poz[j].dl;
                     else
