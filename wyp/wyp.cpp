@@ -1,12 +1,14 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+
 struct track
 {
     double poz_start = 0;
     double dl = 0;
     double v = 0;
 };
+inline bool sorto(track &lhs, track &rhs) { return lhs.v > rhs.v; }
 
 int main()
 {
@@ -17,6 +19,8 @@ int main()
     cin >> n >> D >> W >> M;
     pair<double, int> V_mal; // first = V second = index
     vector<track> poz(n + 1);
+    vector<track> Sorted_V(n);
+    vector<int> track_length(n + 1, 0);
     V_auto = W / M;
     for (int i = 1; i <= n; i++)
     {
@@ -28,8 +32,11 @@ int main()
         l.dl = d;
         l.v = v;
         poz[i] = l;
+        Sorted_V[i - 1] = l;
+        track_length[i] = track_length[i - 1] + d;
     }
     // znalezienie pierwszej mniejszej prędkości od tyłu
+    sort(Sorted_V.begin(), Sorted_V.end(), sorto);
     int index = 1;
     for (int i = n; i >= 2; i--)
     {
@@ -40,8 +47,8 @@ int main()
             break;
         }
     }
-    // licz czas
     vector<bool> Distance_b_tracks(index, 0); // 0 trzeba sprawdzić 1 nie trzeba
+    vector<double> Time_to_connect(index, 0);
     bool must_check = false;
     if (index != 1)
     {
@@ -66,7 +73,23 @@ int main()
                     must_check = true;
             }
         }
+        double time = 0;
+        double min_v;
+        for (int i = index - 1; i >= 1; i--)
+        {
+            if (poz[i].v <= min_v)
+            {
+                Time_to_connect[i] = 0;
+                if (poz[i].v < min_v)
+                    min_v = poz[i].v;
+            }
+            else
+            {
+                double time = (poz[i+1].poz_start - poz[i+1].dl - poz[i].poz_start) / (poz[i].v);
+            }
+        }
     }
+
     // licz czas
     if (must_check)
     {
@@ -93,48 +116,13 @@ int main()
 
             else if (kon_drugiej - pocz_pierwszej >= D)
             {
-                float distans = 0;
-                if (kon_drugiej + poz[i + 1].dl <= poz[i + 2].poz_start - poz[i + 2].dl)
-                {
+                double V = (D + pocz_pierwszej - poz[i + 1].poz_start + poz[i + 1].dl) / time;
+                if (V < Sorted_V[Sorted_V.size() - 1].v)
                     wyprzedone += 1;
-                    continue;
-                }
-                bool wyprz = true;
-                for (int j = i + 2; j <= index; j++)
+                else
                 {
-                    if (poz[j].v >= poz[i + 1].v)
-                        distans += poz[j].dl;
-                    else
-                    {
-                        if (poz[j].poz_start - poz[j].dl - distans > poz[i + 1].v * time + poz[i + 1].poz_start)
-                        {
-                            wyprzedone += 1;
-                            wyprz = false;
-                            break;
-                        }
-                        else
-                        {
-                            double timer = (poz[j].poz_start - poz[j].dl - distans - poz[i + 1].poz_start) / (poz[i + 1].v - poz[j].v);
-                            if (timer < time)
-                            {
-                                kon_drugiej = poz[i + 1].poz_start - poz[i + 1].dl + poz[i + 1].v * timer + poz[j].v * (time - timer);
-                                distans += poz[j].dl;
-                                if (kon_drugiej - pocz_pierwszej < D)
-                                {
-                                    wyprz = false;
-                                    break;
-                                }
-                                else if (kon_drugiej - pocz_pierwszej >= D && j == index)
-                                {
-                                    wyprzedone += 1;
-                                    wyprz = false;
-                                }
-                            }
-                        }
-                    }
+                    int XD = 0;
                 }
-                if (wyprz)
-                    wyprzedone += 1;
             }
         }
     }
