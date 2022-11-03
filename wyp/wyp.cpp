@@ -48,7 +48,7 @@ int main()
         }
     }
     vector<bool> Distance_b_tracks(index, 0); // 0 trzeba sprawdzić 1 nie trzeba
-    vector<double> Time_to_connect(index, 0);
+    vector<double> Time_to_connect(index + 1, 0);
     bool must_check = false;
     if (index != 1)
     {
@@ -74,18 +74,36 @@ int main()
             }
         }
         double time = 0;
-        double min_v;
         for (int i = index - 1; i >= 1; i--)
         {
-            if (poz[i].v <= min_v)
+            if (poz[i].v <= V_mal.first)
             {
                 Time_to_connect[i] = 0;
-                if (poz[i].v < min_v)
-                    min_v = poz[i].v;
+                if (poz[i].v < V_mal.first)
+                {
+                    V_mal.first = poz[i].v;
+                    V_mal.second = i;
+                }
             }
             else
             {
-                double time = (poz[i+1].poz_start - poz[i+1].dl - poz[i].poz_start) / (poz[i].v);
+                if (poz[i].v > poz[i + 1].v)
+                {
+                    double time = (poz[i + 1].poz_start - poz[i + 1].dl - poz[i].poz_start) / (poz[i].v - poz[i + 1].v);
+                    Time_to_connect[i] = time;
+                }
+                else
+                {
+                    for (int j = i + 1; j <= V_mal.second; j++)
+                    {
+                        if (poz[j].v < poz[i].v)
+                        {
+                            double time = (poz[j].poz_start - track_length[j] + track_length[i] - poz[i].poz_start) / (poz[i].v - poz[j].v);
+                            Time_to_connect[i] = time;
+                            break;
+                        }
+                    }
+                }
             }
         }
     }
@@ -99,29 +117,46 @@ int main()
         {
             if (Distance_b_tracks[i] == 1)
                 continue;
-            if (i == index - 1)
+            double time = (poz[i].poz_start + D) / (V_auto - poz[i].v);
+            if (time >= Time_to_connect[i] && Time_to_connect[i] != 0)
+                continue;
+            else
             {
-                double time = (poz[i].poz_start + D) / (V_auto - poz[i].v);
                 double pocz_pierwszej = poz[i].poz_start + poz[i].v * time;
                 double kon_drugiej = poz[i + 1].poz_start - poz[i + 1].dl + poz[i + 1].v * time;
                 if (kon_drugiej - pocz_pierwszej >= D)
-                    wyprzedone += 1;
-                continue;
-            }
-            double time = (poz[i].poz_start + D) / (V_auto - poz[i].v);
-            double pocz_pierwszej = poz[i].poz_start + poz[i].v * time;
-            double kon_drugiej = poz[i + 1].poz_start - poz[i + 1].dl + poz[i + 1].v * time;
-            if (pocz_pierwszej + D <= poz[i + 1].poz_start - poz[i + 1].dl)
-                wyprzedone += 1;
-
-            else if (kon_drugiej - pocz_pierwszej >= D)
-            {
-                double V = (D + pocz_pierwszej - poz[i + 1].poz_start + poz[i + 1].dl) / time;
-                if (V < Sorted_V[Sorted_V.size() - 1].v)
-                    wyprzedone += 1;
-                else
                 {
-                    int XD = 0;
+                    // popraw to żeby też liczyło dystans między nimi
+                    if (Time_to_connect[i] == 0)
+                    {
+                        wyprzedone += 1;
+                        continue;
+                    }
+
+                    double V = (D - poz[i + 1].poz_start + poz[i + 1].dl + pocz_pierwszej) / time; // minimalne V dla którego się spotkają
+                    double timer = 0;
+                    if (V < Sorted_V[Sorted_V.size() - 1].v)
+                    {
+                        wyprzedone += 1;
+                        continue;
+                    }
+                    else
+                    {
+                        if (Time_to_connect[i + 1] >= time)
+                        {
+                            wyprzedone+=1;
+                            continue;
+                        }
+                        // dodaj lepsze liczenie
+                        for (int j = i + 1; j < index; j++)
+                        {
+                            if ((Time_to_connect[j] >= time && poz[j].v >= V) || Time_to_connect[j] == 0)
+                            {
+                                wyprzedone += 1;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         }
