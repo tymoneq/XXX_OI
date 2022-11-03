@@ -126,10 +126,69 @@ int main()
                 double kon_drugiej = poz[i + 1].poz_start - poz[i + 1].dl + poz[i + 1].v * time;
                 if (kon_drugiej - pocz_pierwszej >= D)
                 {
-                    // popraw to żeby też liczyło dystans między nimi
+                    // popraw to żeby też liczyło dystans między nimi może lower bound do kolejnego elementu o wartości 0 i sprawdzenie dystansu między nimi
                     if (Time_to_connect[i] == 0)
                     {
-                        wyprzedone += 1;
+                        double timer = 0;
+                        double distans = poz[i + 1].poz_start - poz[i + 1].dl;
+                        bool wyp = true;
+                        for (int j = i + 1; j <= index; j++)
+                        {
+                            if (timer > time)
+                                break;
+
+                            if (Time_to_connect[j] == 0)
+                            {
+                                distans += poz[j].v * (time - timer);
+                                break;
+                            }
+                            else if (Time_to_connect[j] != 0)
+                            {
+                                if (timer <= Time_to_connect[j])
+                                {
+                                    if (Time_to_connect[j] <= time)
+                                    {
+                                        distans += poz[j].v * (Time_to_connect[j] - timer);
+                                        timer = Time_to_connect[j];
+                                    }
+                                    else
+                                    {
+                                        distans += poz[j].v * (time - timer);
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    while (true)
+                                    {
+                                        if (Time_to_connect[j] == 0)
+                                        {
+                                            distans += poz[j].v * (time - timer);
+                                            break;
+                                        }
+                                        else if (Time_to_connect[j] >= timer)
+                                        {
+                                            if (Time_to_connect[j] <= time)
+                                            {
+                                                distans += poz[j].v * (Time_to_connect[j] - timer);
+                                                timer = Time_to_connect[j];
+                                            }
+                                            else
+                                                distans += poz[j].v * (time - timer);
+                                            ++j;
+                                            break;
+                                        }
+                                        else if (Time_to_connect[j] < timer)
+                                        {
+                                            ++j;
+                                            continue;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (distans - pocz_pierwszej >= D)
+                            wyprzedone += 1;
                         continue;
                     }
 
@@ -144,18 +203,69 @@ int main()
                     {
                         if (Time_to_connect[i + 1] >= time)
                         {
-                            wyprzedone+=1;
+                            wyprzedone += 1;
                             continue;
                         }
                         // dodaj lepsze liczenie
-                        for (int j = i + 1; j < index; j++)
+                        double distans = poz[i + 1].poz_start - poz[i + 1].dl;
+                        for (int j = i + 1; j <= index; j++)
                         {
-                            if ((Time_to_connect[j] >= time && poz[j].v >= V) || Time_to_connect[j] == 0)
+                            if (timer > time)
+                                break;
+
+                            if (Time_to_connect[j] == 0)
                             {
-                                wyprzedone += 1;
+                                distans += poz[j].v * (time - timer);
                                 break;
                             }
+                            else if (Time_to_connect[j] != 0)
+                            {
+                                if (timer <= Time_to_connect[j])
+                                {
+                                    if (Time_to_connect[j] <= time)
+                                    {
+                                        distans += poz[j].v * (Time_to_connect[j] - timer);
+                                        timer = Time_to_connect[j];
+                                    }
+                                    else
+                                    {
+                                        distans += poz[j].v * (time - timer);
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    while (true)
+                                    {
+                                        if (Time_to_connect[j] == 0)
+                                        {
+                                            distans += poz[j].v * (time - timer);
+                                            break;
+                                        }
+                                        else if (Time_to_connect[j] >= timer)
+                                        {
+                                            if (Time_to_connect[j] <= time)
+                                            {
+                                                distans += poz[j].v * (Time_to_connect[j] - timer);
+                                                timer = Time_to_connect[j];
+                                            }
+                                            else
+                                                distans += poz[j].v * (time - timer);
+                                            ++j;
+                                            break;
+                                        }
+                                        else if (Time_to_connect[j] < timer)
+                                        {
+                                            ++j;
+                                            continue;
+                                        }
+                                    }
+                                }
+                            }
                         }
+                        if (distans - pocz_pierwszej >= D)
+                            wyprzedone += 1;
+                        continue;
                     }
                 }
             }
