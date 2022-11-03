@@ -8,7 +8,7 @@ struct track
     double dl = 0;
     double v = 0;
 };
-inline bool sorto(track &lhs, track &rhs) { return lhs.v > rhs.v; }
+inline bool sorto(double &lhs, double &rhs) { return lhs > rhs; }
 
 int main()
 {
@@ -19,7 +19,7 @@ int main()
     cin >> n >> D >> W >> M;
     pair<double, int> V_mal; // first = V second = index
     vector<track> poz(n + 1);
-    vector<track> Sorted_V(n);
+    vector<double> Sorted_V(n);
     vector<int> track_length(n + 1, 0);
     V_auto = W / M;
     for (int i = 1; i <= n; i++)
@@ -32,7 +32,7 @@ int main()
         l.dl = d;
         l.v = v;
         poz[i] = l;
-        Sorted_V[i - 1] = l;
+        Sorted_V[i - 1] = v;
         track_length[i] = track_length[i - 1] + d;
     }
     // znalezienie pierwszej mniejszej prędkości od tyłu
@@ -85,6 +85,7 @@ int main()
                     V_mal.second = i;
                 }
             }
+            // sprawdz liczenie czasu
             else
             {
                 if (poz[i].v > poz[i + 1].v)
@@ -108,165 +109,64 @@ int main()
         }
     }
 
-    // licz czas
-    if (must_check)
+    // gdy V_1> V_2
+    for (int i = 1; i < index; i++)
     {
-        // gdy V_1> V_2
-        // sprawdzaj dystans między nimi i jakie musiałoby być V żeby się dogoniły i gdzie występuje to V
-        for (int i = 1; i < index; i++)
+        if (Distance_b_tracks[i] == 1)
+            continue;
+        double time = (poz[i].poz_start + D) / (V_auto - poz[i].v);
+        if (time >= Time_to_connect[i] && Time_to_connect[i] != 0)
+            continue;
+        else
         {
-            if (Distance_b_tracks[i] == 1)
-                continue;
-            double time = (poz[i].poz_start + D) / (V_auto - poz[i].v);
-            if (time >= Time_to_connect[i] && Time_to_connect[i] != 0)
-                continue;
-            else
+            double pocz_pierwszej = poz[i].poz_start + poz[i].v * time;
+            double kon_drugiej = poz[i + 1].poz_start - poz[i + 1].dl + poz[i + 1].v * time;
+            if (kon_drugiej - pocz_pierwszej >= D)
             {
-                double pocz_pierwszej = poz[i].poz_start + poz[i].v * time;
-                double kon_drugiej = poz[i + 1].poz_start - poz[i + 1].dl + poz[i + 1].v * time;
-                if (kon_drugiej - pocz_pierwszej >= D)
+                double V = (D - poz[i + 1].poz_start + poz[i + 1].dl + pocz_pierwszej) / time; // minimalne V dla którego się spotkają
+
+                if (V < Sorted_V[Sorted_V.size() - 1])
                 {
-                    // popraw to żeby też liczyło dystans między nimi może lower bound do kolejnego elementu o wartości 0 i sprawdzenie dystansu między nimi
-                    if (Time_to_connect[i] == 0)
-                    {
-                        double timer = 0;
-                        double distans = poz[i + 1].poz_start - poz[i + 1].dl;
-                        bool wyp = true;
-                        for (int j = i + 1; j <= index; j++)
-                        {
-                            if (timer > time)
-                                break;
-
-                            if (Time_to_connect[j] == 0)
-                            {
-                                distans += poz[j].v * (time - timer);
-                                break;
-                            }
-                            else if (Time_to_connect[j] != 0)
-                            {
-                                if (timer <= Time_to_connect[j])
-                                {
-                                    if (Time_to_connect[j] <= time)
-                                    {
-                                        distans += poz[j].v * (Time_to_connect[j] - timer);
-                                        timer = Time_to_connect[j];
-                                    }
-                                    else
-                                    {
-                                        distans += poz[j].v * (time - timer);
-                                        break;
-                                    }
-                                }
-                                else
-                                {
-                                    while (true)
-                                    {
-                                        if (Time_to_connect[j] == 0)
-                                        {
-                                            distans += poz[j].v * (time - timer);
-                                            break;
-                                        }
-                                        else if (Time_to_connect[j] >= timer)
-                                        {
-                                            if (Time_to_connect[j] <= time)
-                                            {
-                                                distans += poz[j].v * (Time_to_connect[j] - timer);
-                                                timer = Time_to_connect[j];
-                                            }
-                                            else
-                                                distans += poz[j].v * (time - timer);
-                                            ++j;
-                                            break;
-                                        }
-                                        else if (Time_to_connect[j] < timer)
-                                        {
-                                            ++j;
-                                            continue;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if (distans - pocz_pierwszej >= D)
-                            wyprzedone += 1;
-                        continue;
-                    }
-
-                    double V = (D - poz[i + 1].poz_start + poz[i + 1].dl + pocz_pierwszej) / time; // minimalne V dla którego się spotkają
-                    double timer = 0;
-                    if (V < Sorted_V[Sorted_V.size() - 1].v)
+                    wyprzedone += 1;
+                    continue;
+                }
+                else
+                {
+                    if (Time_to_connect[i + 1] >= time)
                     {
                         wyprzedone += 1;
                         continue;
                     }
-                    else
+                    double distans = poz[i + 1].poz_start - poz[i + 1].dl;
+                    double timer = 0;
+                    for (int j = i + 1; j <= index; j++)
                     {
-                        if (Time_to_connect[i + 1] >= time)
+                        if (Time_to_connect[j] == 0)
                         {
-                            wyprzedone += 1;
-                            continue;
+                            distans += poz[j].v * (time - timer);
+                            break;
                         }
-                        // dodaj lepsze liczenie
-                        double distans = poz[i + 1].poz_start - poz[i + 1].dl;
-                        for (int j = i + 1; j <= index; j++)
+                        else if (Time_to_connect[j] != 0)
                         {
-                            if (timer > time)
-                                break;
-
-                            if (Time_to_connect[j] == 0)
+                            if (timer <= Time_to_connect[j])
                             {
-                                distans += poz[j].v * (time - timer);
-                                break;
-                            }
-                            else if (Time_to_connect[j] != 0)
-                            {
-                                if (timer <= Time_to_connect[j])
+                                if (Time_to_connect[j] <= time)
                                 {
-                                    if (Time_to_connect[j] <= time)
-                                    {
-                                        distans += poz[j].v * (Time_to_connect[j] - timer);
-                                        timer = Time_to_connect[j];
-                                    }
-                                    else
-                                    {
-                                        distans += poz[j].v * (time - timer);
-                                        break;
-                                    }
+                                    distans += poz[j].v * (Time_to_connect[j] - timer);
+                                    timer = Time_to_connect[j];
                                 }
                                 else
                                 {
-                                    while (true)
-                                    {
-                                        if (Time_to_connect[j] == 0)
-                                        {
-                                            distans += poz[j].v * (time - timer);
-                                            break;
-                                        }
-                                        else if (Time_to_connect[j] >= timer)
-                                        {
-                                            if (Time_to_connect[j] <= time)
-                                            {
-                                                distans += poz[j].v * (Time_to_connect[j] - timer);
-                                                timer = Time_to_connect[j];
-                                            }
-                                            else
-                                                distans += poz[j].v * (time - timer);
-                                            ++j;
-                                            break;
-                                        }
-                                        else if (Time_to_connect[j] < timer)
-                                        {
-                                            ++j;
-                                            continue;
-                                        }
-                                    }
+                                    distans += poz[j].v * (time - timer);
+                                    break;
                                 }
                             }
                         }
-                        if (distans - pocz_pierwszej >= D)
-                            wyprzedone += 1;
-                        continue;
                     }
+
+                    if (distans - pocz_pierwszej >= D)
+                        wyprzedone += 1;
+                    continue;
                 }
             }
         }
