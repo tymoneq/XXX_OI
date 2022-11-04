@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "i:/github/XXX_OI/XXX_OI/wyp",
-      "program": "i:/github/XXX_OI/XXX_OI/wyp/build/Debug/outDebug",
+      "cwd": "d:/XXX_OI/wyp",
+      "program": "d:/XXX_OI/wyp/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

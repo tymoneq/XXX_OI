@@ -8,8 +8,6 @@ struct track
     double dl = 0;
     double v = 0;
 };
-inline bool sorto(double &lhs, double &rhs) { return lhs > rhs; }
-
 int main()
 {
     ios_base::sync_with_stdio(0);
@@ -19,7 +17,6 @@ int main()
     cin >> n >> D >> W >> M;
     pair<double, int> V_mal; // first = V second = index
     vector<track> poz(n + 1);
-    vector<double> Sorted_V(n);
     vector<int> track_length(n + 1, 0);
     V_auto = W / M;
     for (int i = 1; i <= n; i++)
@@ -32,11 +29,9 @@ int main()
         l.dl = d;
         l.v = v;
         poz[i] = l;
-        Sorted_V[i - 1] = v;
         track_length[i] = track_length[i - 1] + d;
     }
     // znalezienie pierwszej mniejszej prędkości od tyłu
-    sort(Sorted_V.begin(), Sorted_V.end(), sorto);
     int index = 1;
     for (int i = n; i >= 2; i--)
     {
@@ -95,12 +90,22 @@ int main()
                 }
                 else
                 {
+                    double distans = poz[i + 1].poz_start - poz[i + 1].dl - poz[i].poz_start;
                     for (int j = i + 1; j <= V_mal.second; j++)
                     {
                         if (poz[j].v < poz[i].v)
                         {
                             double time = (poz[j].poz_start - track_length[j] + track_length[i] - poz[i].poz_start) / (poz[i].v - poz[j].v);
-                            Time_to_connect[i] = time;
+                            if (time <= Time_to_connect[j])
+                                Time_to_connect[i] = time;
+                            else
+                            {
+                                double timer = 0;
+                                for (int k = j; k < V_mal.second; k++)
+                                {
+                                    
+                                }
+                            }
                             break;
                         }
                     }
@@ -125,7 +130,7 @@ int main()
             {
                 double V = (D - poz[i + 1].poz_start + poz[i + 1].dl + pocz_pierwszej) / time; // minimalne V dla którego się spotkają
 
-                if (V < Sorted_V[Sorted_V.size() - 1])
+                if (V < V_mal.first)
                 {
                     wyprzedone += 1;
                     continue;
