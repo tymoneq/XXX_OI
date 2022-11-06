@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "d:/XXX_OI/zbo",
-      "program": "d:/XXX_OI/zbo/build/Debug/outDebug",
+      "cwd": "i:/github/XXX_OI/XXX_OI/zbo",
+      "program": "i:/github/XXX_OI/XXX_OI/zbo/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
