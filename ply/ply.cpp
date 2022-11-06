@@ -52,8 +52,5 @@ int main()
         }
         cout << wynik;
     }
-
-
-
     return 0;
 }
