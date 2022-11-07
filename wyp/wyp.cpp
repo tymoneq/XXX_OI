@@ -81,8 +81,6 @@ int main()
         }
         else
         {
-            if (i == 569)
-                int XXX = 0;
             double fix_time = 0;
             double timer = 0;
             double droga_1 = poz[i].poz_start;
