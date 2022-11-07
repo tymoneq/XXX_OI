@@ -19,14 +19,33 @@ int main()
     int a, maxi, mini;
     unsigned long long wynik = 0;
     vector<int> Zamki;
-    Zamki.push_back(0);
+    Zamki.push_back(1);
     for (int i = 0; i < k; i++)
     {
         cin >> a;
-        for (auto el : Zamki)
+        // bfs
+        vector<bool> Visited(n + 1);
+        vector<long long> distance(n + 1);
+        queue<int> q;
+        q.push(a);
+        Visited[a] = true;
+        while (!q.empty())
         {
-            maxi = max(a, el);
-            mini = min(a, el);
+            int c = q.front();
+            q.pop();
+            for (auto b : G[c])
+            {
+                if (!Visited[b.first])
+                {
+                    distance[b.first] = distance[c] + b.second;
+                    Visited[b.first] = true;
+                    q.push(b.first);
+                }
+            }
+        }
+        for (int castle : Zamki)
+        {
+            wynik += 2 * distance[castle];
         }
         Zamki.push_back(a);
         cout << wynik << "\n";
