@@ -52,5 +52,7 @@ int main()
         }
         cout << wynik;
     }
+    else
+        cout << 0;
     return 0;
 }
