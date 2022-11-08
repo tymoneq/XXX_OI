@@ -22,7 +22,7 @@ int main()
             --otwarte;
         }
     }
-    if (stopien_baz == H)
+    if (stopien_baz <= H)
         cout << 0;
     else if (stopien_baz > H)
     {
@@ -52,7 +52,5 @@ int main()
         }
         cout << wynik;
     }
-    else
-        cout << 0;
     return 0;
 }
