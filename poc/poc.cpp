@@ -116,6 +116,18 @@ void binary_b(int search, vector<int> &zbior, int l, int r, int &index)
     }
 }
 
+vector<int> front_distance_count(int n, vector<int> &Bajtek, vector<int> &Bitek)
+{
+    int index = 0;
+    vector<int> distance_front(n);
+    for (int i = 0; i < n; i++)
+    {
+        distance_front[i] = index;
+        if (Bajtek[i] == Bitek[index] && index < Bitek.size())
+            index++;
+    }
+    return distance_front;
+}
 int main()
 {
 
@@ -137,15 +149,9 @@ int main()
     for (int i = 0; i < m; i++)
         cin >> Bitek[i];
 
-    int index = 0;
     // liczenie dystansu
-    for (int i = 0; i < n; i++)
-    {
-        distance_front[i] = index;
-        if (Bajtek[i] == Bitek[index] && index < Bitek.size())
-            index++;
-    }
-    index = 0;
+    distance_front = front_distance_count(n, Bajtek, Bitek);
+    int index = 0;
     int u = m - 1;
     for (int i = n - 1; i >= 0; i--)
     {
@@ -166,8 +172,6 @@ int main()
     for (int i = 0; i < n; i++)
     {
 
-        if (i == 17)
-            int TT = 0;
         int val = Bajtek[i];
         int front = distance_front[i];
         int back = distance_back[i];
