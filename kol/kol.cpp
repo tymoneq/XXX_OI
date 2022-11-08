@@ -4,6 +4,14 @@ using namespace std;
 
 long matrix[2001][2001];
 long czas[2001][2001];
+
+long time_calc(long current, long time, vector<long> &snake_type)
+{
+    if (current - time >= snake_type.size())
+        return -1;
+    else
+        return snake_type[snake_type.size() - (current - time) - 1];
+}
 int main()
 {
     ios_base::sync_with_stdio(0);
@@ -40,19 +48,14 @@ int main()
         cin >> oper;
         if (oper == 'Z')
         {
-
             cin >> x >> y;
-
             long time = czas[x][y];
             if (time == 0)
                 cout << -1 << "\n";
             else
             {
                 long current = czas[new_x][new_y];
-                if (current - time >= snake_type.size())
-                    cout << -1 << "\n";
-                else
-                    cout << snake_type[snake_type.size() - (current - time) - 1] << "\n";
+                cout << time_calc(current, time, snake_type) << "\n";
             }
         }
         else if (oper == 'P')
