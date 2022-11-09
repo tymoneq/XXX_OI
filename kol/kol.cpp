@@ -12,6 +12,11 @@ long time_calc(long current, long time, vector<long> &snake_type)
     else
         return snake_type[snake_type.size() - (current - time) - 1];
 }
+void add_new_element(int new_x, int new_y, vector<long> &snake_type)
+{
+    snake_type.push_back(matrix[new_x][new_y]);
+    matrix[new_x][new_y] = -1;
+}
 int main()
 {
     ios_base::sync_with_stdio(0);
@@ -64,8 +69,7 @@ int main()
             czas[new_x][new_y] = czas[new_x][new_y - 1] + 1;
             if (matrix[new_x][new_y] != -1)
             {
-                snake_type.push_back(matrix[new_x][new_y]);
-                matrix[new_x][new_y] = -1;
+                add_new_element(new_x, new_y, snake_type);
             }
         }
         else if (oper == 'L')
@@ -74,8 +78,7 @@ int main()
             czas[new_x][new_y] = czas[new_x][new_y + 1] + 1;
             if (matrix[new_x][new_y] != -1)
             {
-                snake_type.push_back(matrix[new_x][new_y]);
-                matrix[new_x][new_y] = -1;
+                add_new_element(new_x, new_y, snake_type);
             }
         }
         else if (oper == 'G')
@@ -84,8 +87,7 @@ int main()
             czas[new_x][new_y] = czas[new_x + 1][new_y] + 1;
             if (matrix[new_x][new_y] != -1)
             {
-                snake_type.push_back(matrix[new_x][new_y]);
-                matrix[new_x][new_y] = -1;
+                add_new_element(new_x, new_y, snake_type);
             }
         }
         else if (oper == 'D')
@@ -94,8 +96,7 @@ int main()
             czas[new_x][new_y] = czas[new_x - 1][new_y] + 1;
             if (matrix[new_x][new_y] != -1)
             {
-                snake_type.push_back(matrix[new_x][new_y]);
-                matrix[new_x][new_y] = -1;
+                add_new_element(new_x, new_y, snake_type);
             }
         }
     }
