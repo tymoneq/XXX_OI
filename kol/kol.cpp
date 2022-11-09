@@ -12,7 +12,7 @@ long time_calc(long current, long time, vector<long> &snake_type)
     else
         return snake_type[snake_type.size() - (current - time) - 1];
 }
-void add_new_element(int new_x, int new_y, vector<long> &snake_type)
+inline void add_new_element(int new_x, int new_y, vector<long> &snake_type)
 {
     snake_type.push_back(matrix[new_x][new_y]);
     matrix[new_x][new_y] = -1;
