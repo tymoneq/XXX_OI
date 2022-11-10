@@ -12,7 +12,7 @@ void binary_f(int search, vector<int> &zbior, int l, int r, int &index)
 
     int zakres = (r - l) / 2 + l;
     int val = zbior[zakres];
-    if (r == l && zbior.size() > 1)
+    if (r == l)
     {
         if (search < val)
             index = l - 1;
@@ -20,25 +20,6 @@ void binary_f(int search, vector<int> &zbior, int l, int r, int &index)
             index = l;
         return;
     }
-    else if (zbior.size() == 1)
-    {
-        if (search == val)
-        {
-            index = 0;
-            return;
-        }
-        else if (search > val)
-        {
-            index = 2;
-            return;
-        }
-        else
-        {
-            index = numeric_limits<int>::min();
-            return;
-        }
-    }
-
     if (search < val)
     {
         r = zakres;
@@ -69,35 +50,13 @@ void binary_b(int search, vector<int> &zbior, int l, int r, int &index)
     int zakres = (r - l) / 2 + l;
     int val = zbior[zakres];
 
-    if (r == l && zbior.size() > 1)
+    if (r == l)
     {
-
         index = l;
         return;
     }
-
-    else if (zbior.size() == 1)
-    {
-        if (search == val)
-        {
-            index = 0;
-            return;
-        }
-        else if (search > val)
-        {
-            index = 0;
-            return;
-        }
-        else
-        {
-            index = numeric_limits<int>::max();
-            return;
-        }
-    }
-
     if (search > val)
     {
-
         r = zakres;
         binary_b(search, zbior, l, r, index);
     }
