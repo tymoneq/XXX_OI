@@ -42,37 +42,16 @@ int main()
             break;
         }
     }
-    vector<bool> Distance_b_tracks(index, 0); // 0 trzeba sprawdzić 1 nie trzeba
     vector<double> Time_to_connect(index + 1, 0);
-    bool must_check = false;
-
-    for (int i = 1; i < index; i++)
-    {
-        if (poz[i].v < poz[i + 1].v)
-            must_check = true;
-        else if (poz[i].v == poz[i + 1].v)
-        {
-            float distance_b = poz[i + 1].poz_start - poz[i + 1].dl - poz[i].poz_start;
-            if (distance_b < D)
-                Distance_b_tracks[i] = true;
-            else
-                must_check = true;
-        }
-        else if (poz[i].v > poz[i + 1].v)
-        {
-            float distance_b = poz[i + 1].poz_start - poz[i + 1].dl - poz[i].poz_start;
-            if (distance_b <= D)
-                Distance_b_tracks[i] = true;
-            else
-                must_check = true;
-        }
-    }
     double time = 0;
     for (int i = index - 1; i >= 1; i--)
     {
         if (poz[i].v <= V_mal.first)
         {
-            Time_to_connect[i] = 0;
+            if (poz[i].poz_start == poz[i + 1].poz_start - poz[i + 1].dl)
+                Time_to_connect[i] = 0;
+            else
+                Time_to_connect[i] = -1;
             if (poz[i].v < V_mal.first)
             {
                 V_mal.first = poz[i].v;
@@ -85,7 +64,6 @@ int main()
             double timer = 0;
             double droga_1 = poz[i].poz_start;
             double kon_2 = poz[i + 1].poz_start - poz[i + 1].dl;
-            double dystans_miendzy = 0;
             for (int j = i + 1; j <= V_mal.second; j++)
             {
                 if (droga_1 == kon_2)
@@ -96,39 +74,42 @@ int main()
                 if (droga_1 > kon_2)
                 {
                     double fix_poz = droga_1 - kon_2;
-                    double fix_timer = fix_poz / poz[j - 1].v;
-                    Time_to_connect[i] = timer - fix_timer;
+                    fix_time = fix_poz / poz[j - 1].v;
+                    Time_to_connect[i] = timer - fix_time;
                     break;
                 }
                 if (poz[j].v < poz[i].v)
                 {
                     time = (poz[j].poz_start - track_length[j] + track_length[i] - poz[i].poz_start) / (poz[i].v - poz[j].v);
-                    if (Time_to_connect[j] == 0)
+                    if (Time_to_connect[j] == -1)
                     {
                         fix_time = (kon_2 - droga_1) / (poz[i].v - poz[j].v);
                         Time_to_connect[i] = fix_time + timer;
                         break;
                     }
+                    else if (Time_to_connect[j] == 0 && j == V_mal.second)
+                    {
+                        fix_time = (kon_2 - droga_1) / (poz[i].v - poz[j].v);
+                        Time_to_connect[i] = fix_time + timer;
+                        break;
+                    }
+
                     if (time <= Time_to_connect[j])
                     {
                         fix_time = (kon_2 - droga_1) / (poz[i].v - poz[j].v);
                         Time_to_connect[i] = fix_time + timer;
                         break;
                     }
-                    else
+                    else if (Time_to_connect[j] > timer)
                     {
-                        if (Time_to_connect[j] <= timer)
-                            continue;
                         timer = Time_to_connect[j] - timer;
                         droga_1 += poz[i].v * timer;
                         kon_2 += poz[j].v * timer;
                         timer = Time_to_connect[j];
                     }
                 }
-                else
+                else if (Time_to_connect[j] > timer)
                 {
-                    if (Time_to_connect[j] <= timer)
-                        continue;
                     timer = Time_to_connect[j] - timer;
                     droga_1 += poz[i].v * timer;
                     kon_2 += poz[j].v * timer;
@@ -141,10 +122,10 @@ int main()
     // gdy V_1> V_2
     for (int i = 1; i < index; i++)
     {
-        if (Distance_b_tracks[i] == 1)
+        time = (poz[i].poz_start + D) / (V_auto - poz[i].v);
+        if (time >= Time_to_connect[i] && Time_to_connect[i] != -1)
             continue;
-        double time = (poz[i].poz_start + D) / (V_auto - poz[i].v);
-        if (time >= Time_to_connect[i] && Time_to_connect[i] != 0)
+        if (Time_to_connect[i] == 0)
             continue;
         else
         {
@@ -170,12 +151,17 @@ int main()
                     double timer = 0;
                     for (int j = i + 1; j <= index; j++)
                     {
-                        if (Time_to_connect[j] == 0)
+                        if (Time_to_connect[j] == -1)
                         {
                             distans += poz[j].v * (time - timer);
                             break;
                         }
-                        else if (Time_to_connect[j] != 0)
+                        else if (Time_to_connect[j] == 0 && j == index)
+                        {
+                            distans += poz[j].v * (time - timer);
+                            break;
+                        }
+                        else if (Time_to_connect[j] != -1)
                         {
                             if (timer <= Time_to_connect[j])
                             {
