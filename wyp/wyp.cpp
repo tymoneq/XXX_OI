@@ -48,7 +48,7 @@ int main()
     {
         if (poz[i].v <= V_mal.first)
         {
-            if (poz[i].poz_start == poz[i + 1].poz_start - poz[i + 1].dl)
+            if (poz[i].poz_start == poz[i + 1].poz_start - poz[i + 1].dl && poz[i].v == poz[i].v)
                 Time_to_connect[i] = 0;
             else
                 Time_to_connect[i] = -1;
@@ -123,11 +123,9 @@ int main()
     for (int i = 1; i < index; i++)
     {
         time = (poz[i].poz_start + D) / (V_auto - poz[i].v);
-        if (time >= Time_to_connect[i] && Time_to_connect[i] != -1)
-            continue;
-        if (Time_to_connect[i] == 0)
-            continue;
-        else
+        // if (time >= Time_to_connect[i] && Time_to_connect[i] != -1)
+        //     continue;
+        // else
         {
             double pocz_pierwszej = poz[i].poz_start + poz[i].v * time;
             double kon_drugiej = poz[i + 1].poz_start - poz[i + 1].dl + poz[i + 1].v * time;
