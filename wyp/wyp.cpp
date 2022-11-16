@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-
+// Tymon Tumialis
 using namespace std;
 
 struct track
@@ -75,7 +75,7 @@ int main()
                 if (droga_1 > kon_2)
                 {
                     double fix_poz = droga_1 - kon_2;
-                    fix_time = fix_poz / poz[j - 1].v;
+                    fix_time = fix_poz / poz[i].v;
                     Time_to_connect[i] = timer - fix_time;
                     break;
                 }
@@ -89,7 +89,7 @@ int main()
                         Time_to_connect[i] = fix_time + timer;
                         break;
                     }
-                    else if (time <= Time_to_connect[j])
+                    else if (time < Time_to_connect[j])
                     {
                         fix_time = (kon_2 - droga_1) / (poz[i].v - poz[j].v);
                         Time_to_connect[i] = fix_time + timer;
@@ -107,7 +107,7 @@ int main()
                 {
                     timer = Time_to_connect[j] - timer;
                     droga_1 += poz[i].v * timer;
-                    kon_2 += poz[j].v * timer;
+                    kon_2 += poz[j].v * timer; //sprawdź czy większa prędkość jest tu
                     timer = Time_to_connect[j];
                 }
             }
@@ -131,7 +131,7 @@ int main()
                     distans += poz[j].v * (time - timer);
                     break;
                 }
-                else if (timer <= Time_to_connect[j])
+                else if (timer < Time_to_connect[j])
                 {
                     if (Time_to_connect[j] < time)
                     {
