@@ -45,7 +45,7 @@ int main()
     vector<double> Time_to_connect(index + 1, 0);
     double time = 0;
     Time_to_connect[index] = -1;
-    for (int i = index - 1; i >= 1; i--)
+    for (int i = index - 1; i >= 1; i--) // i==3 dal testu 182 działa źle sprawdź
     {
         if (poz[i].v <= V_mal.first)
         {
