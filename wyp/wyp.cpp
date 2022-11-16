@@ -67,7 +67,7 @@ int main()
             double kon_2 = poz[i + 1].poz_start - poz[i + 1].dl;
             for (int j = i + 1; j <= V_mal.second; j++)
             {
-                if (droga_1 == kon_2)
+                if (droga_1 == kon_2 && poz[i].v >= poz[i + 1].v)
                 {
                     Time_to_connect[i] = timer;
                     break;
@@ -107,7 +107,7 @@ int main()
                 {
                     timer = Time_to_connect[j] - timer;
                     droga_1 += poz[i].v * timer;
-                    kon_2 += poz[j].v * timer; //sprawdź czy większa prędkość jest tu
+                    kon_2 += poz[j].v * timer; // sprawdź czy większa prędkość jest tu
                     timer = Time_to_connect[j];
                 }
             }
