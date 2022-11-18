@@ -1,12 +1,18 @@
 #include <bits/stdc++.h>
 // Tymon Tumialis
 using namespace std;
+typedef unsigned long long ull;
 struct edge_points
 {
     int castle = 0;
-    unsigned long long value = 0;
+    ull value = 0;
 };
-inline bool sorto(int a, int b) { return a < b; }
+struct last_value
+{
+    int castle_num = 0;
+    ull value = 0;
+};
+
 int main()
 {
     ios_base::sync_with_stdio(0);
@@ -23,7 +29,7 @@ int main()
         G[b].push_back(make_pair(a, c));
     }
     int a;
-    unsigned long long wynik = 0;
+    ull wynik = 0;
     // if (n * k <= 1000000) // 1 podzadanie
     // {
     //     vector<int> Zamki;
@@ -62,6 +68,7 @@ int main()
     // else // drugie podzadanie
     {
         // bfs
+        ull previous_wynik = 0;
         vector<bool> Visited(n + 1);
         vector<int> Dist(n + 1, 0);
         vector<int> Zamki_sort;
@@ -85,10 +92,12 @@ int main()
                 }
             }
         }
-
+        last_value last_val;
+        bool prev_val_find = false;
         for (int i = 0; i < k; i++)
         {
             cin >> a;
+
             if (i == 0)
             {
                 wynik += Dist[a];
@@ -96,7 +105,6 @@ int main()
                 max_val_up.value = 0;
                 min_val_down.castle = a;
                 min_val_down.value = 0;
-                Zamki_sort.push_back(a);
             }
             else if (i == 1)
             {
@@ -107,48 +115,48 @@ int main()
                 max_val_up.value = Dist[maxi] - Dist[mini];
                 min_val_down.castle = mini;
                 min_val_down.value = Dist[maxi] - Dist[mini];
-                Zamki_sort.push_back(a);
             }
             else
             {
-                sort(Zamki_sort.begin(), Zamki_sort.end(), sorto);
-                if (a < Zamki_sort[0])
+                if (a < min_val_down.castle)
                 {
                     wynik += Dist[a] + min_val_down.value + (Dist[min_val_down.castle] - Dist[a]) * Zamki_sort.size();
                     min_val_down.value += (Dist[min_val_down.castle] - Dist[a]) * Zamki_sort.size();
                     min_val_down.castle = a;
                     max_val_up.value += Dist[max_val_up.castle] - Dist[a];
+                    last_val.value += Dist[last_val.castle_num] - Dist[min_val_down.castle];
                 }
-                else if (a < Zamki_sort[1] && a > Zamki_sort[0])
-                {
-                    min_val_down.value += Dist[a] - Dist[min_val_down.castle];
-                    max_val_up.value += Dist[max_val_up.castle] - Dist[a];
-                    wynik += Dist[a] + min_val_down.value - (Dist[a] - Dist[min_val_down.castle]) * (Zamki_sort.size() - 1);
-                }
-                else if (a > Zamki_sort[Zamki_sort.size() - 2] && a < Zamki_sort[Zamki_sort.size() - 1])
-                {
-                    min_val_down.value += Dist[a] - Dist[min_val_down.castle];
-                    max_val_up.value += Dist[max_val_up.castle] - Dist[a];
-                    wynik += Dist[a] + max_val_up.value - (Dist[max_val_up.castle] - Dist[a]) * (Zamki_sort.size() - 1);
-                }
-                else if (a > Zamki_sort[Zamki_sort.size() - 1])
+                else if (a > max_val_up.castle)
                 {
                     wynik += Dist[a] + max_val_up.value + (Dist[a] - Dist[max_val_up.castle]) * Zamki_sort.size();
                     max_val_up.value += (Dist[a] - Dist[max_val_up.castle]) * Zamki_sort.size();
                     max_val_up.castle = a;
                     min_val_down.value += Dist[a] - Dist[min_val_down.castle];
+                    last_val.value += Dist[max_val_up.castle] - Dist[last_val.castle_num];
                 }
                 else
                 {
                     wynik += Dist[a];
-                    for (int el : Zamki_sort)
-                        wynik += abs(Dist[a] - Dist[el]);
+                    if (!prev_val_find)
+                    {
+                        for (int el : Zamki_sort)
+                            wynik += abs(Dist[a] - Dist[el]);
+
+                        prev_val_find = true;
+                    }
+                    else if (i % 2 == 0)
+                        wynik += last_val.value;
+                    else
+                        wynik += last_val.value + abs(Dist[last_val.castle_num] - Dist[a]);
                     max_val_up.value += Dist[max_val_up.castle] - Dist[a];
                     min_val_down.value += Dist[a] - Dist[min_val_down.castle];
+                    last_val.castle_num = a;
+                    last_val.value = wynik - previous_wynik - Dist[a];
                 }
-                Zamki_sort.push_back(a);
             }
 
+            previous_wynik = wynik;
+            Zamki_sort.push_back(a);
             cout << wynik * 2 << "\n";
         }
     }
