@@ -125,6 +125,7 @@ int main()
                     min_val_down.castle = a;
                     max_val_up.value += Dist[max_val_up.castle] - Dist[a];
                     last_val.value += Dist[last_val.castle_num] - Dist[min_val_down.castle];
+                    prev_val_find = false;
                 }
                 else if (a > max_val_up.castle)
                 {
@@ -133,6 +134,7 @@ int main()
                     max_val_up.castle = a;
                     min_val_down.value += Dist[a] - Dist[min_val_down.castle];
                     last_val.value += Dist[max_val_up.castle] - Dist[last_val.castle_num];
+                    prev_val_find = false;
                 }
                 else
                 {
