@@ -2,4 +2,4 @@
 OI
 
 
-Moje rozwiązania zadań z XXX etapu OI.
+Moje rozwiązania zadań z XXX etapu OI, za które otrzymalem 380 punktów.
